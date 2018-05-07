@@ -31,20 +31,22 @@
       $(document).ready(function () {
           <!-- Scroll to the top -->
           $(this).scrollTop(0);
-          
+
           $('#fileBtn').change(function () {
+              if ($('#regexBox').val() === "") {
+                  alert("You must enter a regular expression!");
+                  location.reload();
+              } else {
               var file = this.files && this.files[0];
-              if (!file) {
-                  alert("You need to upload a file.");
-                  return;
-              }
               var fileReader = new FileReader();
               fileReader.onload = function (e) {
                   var text = e.target.result;
-                  parseInput(text);
+                  run(text);
               };
               fileReader.readAsText(this.files[0]);
+              }
           });
+
       });
   </script>
 
@@ -59,9 +61,17 @@
               <h1 class="brand-heading">GREPHY</h1>
             </div>
           </div>
+
           <div class="row">
             <div class="col-lg-8 mx-auto">
-              <h2>Upload your file here</h2>
+              <h2>Enter REGEX</h2>
+              <input type="text" id="regexBox">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h2>Upload Test File</h2>
               <!-- Clever way of avoiding the annoying HTML 'file' input type and used an actual button instead -->
                 <input type="file" style="display: none;" accept=".txt" id="fileBtn">
                 <input type="button" class="btn" value="Choose File" onclick="document.getElementById('fileBtn').click();"/>
@@ -75,16 +85,21 @@
     <section id="output" class="content-section text-center">
       <div class="container">
         <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <h2>Output</h2>
-            <textarea id="outputTA" rows="10" style="resize:none; background-color: #dcdcdc" cols="80" readonly></textarea>
-            <br><br>
-            <p>This is currently just the file contents.</p>
+          <div class="col-lg-8 mx-auto" style="display:inline-block">
+            <h2>NFA and DFA 5-Tuples</h2>
+            <textarea id="nfaTA" rows="7" style="resize:none; background-color: #dcdcdc" cols="30" readonly></textarea>
+            <textarea id="dfaTA" rows="7" style="resize:none; background-color: #dcdcdc" cols="30" readonly></textarea>
           </div>
         </div>
+          <br><br>
+          <div class="row">
+              <div class="col-lg-8 mx-auto">
+                  <h2>Accepted Lines From Test File</h2>
+                  <textarea id="acceptedTA" rows="10" style="resize:none; background-color: #dcdcdc" cols="50" readonly></textarea>
+              </div>
+          </div>
       </div>
     </section>
-
     <footer>
       <div class="container text-center">
         <p>Created by Christian Menk</p>
