@@ -5,6 +5,7 @@ function run(text){
     }, 1000);
 
     learnAlphabet(text);
+    regexToNFA($('#regexBox').val());
 }
 
 function learnAlphabet(text){
@@ -16,5 +17,8 @@ function learnAlphabet(text){
         alphabet.push(text.charAt(i));
     }
 
+    FINAL_ALPHABET = alphabet;
+
     $('#acceptedTA').val("Alphabet from test file: " + alphabet);
 }
+
