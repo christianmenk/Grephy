@@ -2,3 +2,8 @@
 
 var FINAL_ALPHABET = "";
 var INPUT_TYPE = "";
+var TEST_INPUT = "";
+
+var NFA_TUPLE = [];
+var ACCEPTING_STATES = [];
+var START_STATE = "";

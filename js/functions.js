@@ -4,6 +4,7 @@ function run(text){
         scrollTop: $("#output").offset().top
     }, 1000);
 
+    TEST_INPUT = text;
     learnAlphabet(text);
     regexToNFA($('#regexBox').val());
 }
@@ -22,3 +23,74 @@ function learnAlphabet(text){
     $('#acceptedTA').val("Alphabet from test file: " + alphabet);
 }
 
+
+
+function regexToNFA(regex){
+    var curChar = "";
+    var prevChar = "";
+    var nextChar = "";
+    var input = "";
+    var newNFA;
+
+    for(var i = 0; i < regex.length; i++){
+        input = regex.charAt(i);
+        prevChar = regex.charAt(i - 1);
+        curChar =  regex.charAt(i);
+        nextChar = regex.charAt(i + 1);
+        switch(input){
+            case '*':
+                // Handle star
+                if((i - 1) == 0) {
+                    newNFA = {state: 0, letter: prevChar, transition: [prevChar, 0]};
+                    START_STATE = newNFA.state;
+                    NFA_TUPLE.push(newNFA);
+                    console.log(NFA_TUPLE);
+                } else if(i !== regex.length - 1 && isLetter(nextChar)){
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    NFA_TUPLE.push(newNFA);
+                    console.log(NFA_TUPLE);
+                } else if(i == regex.length - 1){
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    NFA_TUPLE.push(newNFA);
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), accepting: true};
+                    NFA_TUPLE.push(newNFA);
+                    ACCEPTING_STATES.push(newNFA.state);
+                    console.log(NFA_TUPLE);
+                }
+
+                break;
+            case '|':
+
+
+                break;
+            case '(':
+                // Handle open bracket
+                break;
+            case ')':
+                // Handle close bracket
+                break;
+            default:
+                if((i == 0) && isLetter(nextChar)) {
+                    newNFA = {state: 0, letter: curChar, transition: [curChar, 1], accepting: false};
+                    NFA_TUPLE.push(newNFA);
+                    console.log(NFA_TUPLE);
+                } else if(i !== regex.length - 1 && isLetter(nextChar)){
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    NFA_TUPLE.push(newNFA);
+                    console.log(NFA_TUPLE);
+                } else if(i == regex.length - 1){
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    NFA_TUPLE.push(newNFA);
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), accepting: true};
+                    NFA_TUPLE.push(newNFA);
+                    ACCEPTING_STATES.push(newNFA.state);
+                    console.log(NFA_TUPLE);
+                }
+                break;
+        }
+    }
+}
+
+function isLetter(str) {
+    return str.length === 1 && str.match(/[a-z]/i);
+}
