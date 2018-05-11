@@ -23,9 +23,7 @@
     <!-- Custom styles for this template -->
     <link href="css/grayscale.min.css" rel="stylesheet">
     <script src="js/functions.js"></script>
-      <script src="js/globals.js"></script>
-      <script src="js/NFA.js"></script>
-      <script src="js/States.js"></script>
+    <script src="js/globals.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
   </head>
 
@@ -50,7 +48,13 @@
               }
           });
 
+          $('input:radio').change(function() {
+              $('#regexBox').val(this.value);
+          });
+
       });
+
+
   </script>
 
   <body id="page-top">
@@ -69,6 +73,14 @@
             <div class="col-lg-8 mx-auto">
               <h2>Enter REGEX</h2>
               <input type="text" id="regexBox">
+              <br><br>
+              <h5>
+                <input type="radio" name="testCase" value="a*b"> a*b
+                <br>
+                <input type="radio" name="testCase" value="ba*"> ba*
+                <br>
+                <input type="radio" name="testCase" value="ab*"> ab*
+              </h5>
             </div>
           </div>
           <br>
@@ -89,11 +101,11 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto" style="display:inline-block">
-            <h2>NFA and DFA 5-Tuples</h2>
-            <textarea id="nfaTA" rows="7" style="resize:none; background-color: #dcdcdc" cols="30" readonly></textarea>
-            <textarea id="dfaTA" rows="7" style="resize:none; background-color: #dcdcdc" cols="30" readonly></textarea>
+            <h2>NFA DOT Output</h2>
+            <textarea id="nfaTA" rows="7" style="resize:none; background-color: #dcdcdc" cols="40" readonly></textarea>
           </div>
         </div>
+        <button class="btn" onclick="saveFile()">Save Output</button>
           <br><br>
           <div class="row">
               <div class="col-lg-8 mx-auto">
