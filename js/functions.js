@@ -41,18 +41,21 @@ function regexToNFA(regex){
             case '*':
                 // Handle star
                 if((i - 1) == 0) {
-                    newNFA = {state: 0, letter: prevChar, transition: [prevChar, 0]};
+                    if(isLetter(nextChar)){
+                        newNFA = {state: 0, transition: [prevChar, 0, prevChar, 1],accepting: true};
+                    } else {
+                        newNFA = {state: 0, transition: [prevChar, 0],accepting: true};
+                    }
+                    ACCEPTING_STATES.push(newNFA.state);
                     START_STATE = newNFA.state;
                     NFA_TUPLE.push(newNFA);
                     console.log(NFA_TUPLE);
                 } else if(i !== regex.length - 1 && isLetter(nextChar)){
-                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), transition: [prevChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), prevChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: true};
                     NFA_TUPLE.push(newNFA);
                     console.log(NFA_TUPLE);
                 } else if(i == regex.length - 1){
-                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
-                    NFA_TUPLE.push(newNFA);
-                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), accepting: true};
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), transition: [prevChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1)], accepting: true};
                     NFA_TUPLE.push(newNFA);
                     ACCEPTING_STATES.push(newNFA.state);
                     console.log(NFA_TUPLE);
@@ -71,15 +74,16 @@ function regexToNFA(regex){
                 break;
             default:
                 if((i == 0) && isLetter(nextChar)) {
-                    newNFA = {state: 0, letter: curChar, transition: [curChar, 1], accepting: false};
+                    newNFA = {state: 0, transition: [curChar, 1], accepting: false};
+                    START_STATE = newNFA.state;
                     NFA_TUPLE.push(newNFA);
                     console.log(NFA_TUPLE);
                 } else if(i !== regex.length - 1 && isLetter(nextChar)){
-                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
                     NFA_TUPLE.push(newNFA);
                     console.log(NFA_TUPLE);
                 } else if(i == regex.length - 1){
-                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), letter: curChar, transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
+                    newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), transition: [curChar, ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+2)], accepting: false};
                     NFA_TUPLE.push(newNFA);
                     newNFA = {state: ((NFA_TUPLE[NFA_TUPLE.length - 1].state)+1), accepting: true};
                     NFA_TUPLE.push(newNFA);
